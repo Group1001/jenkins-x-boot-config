@@ -1,34 +1,96 @@
+---
+autoUpdate:
+  enabled: true
+  schedule: 0 0 * * *
+bootConfigURL: https://github.com/Group1001/jenkins-x-boot-config
 cluster:
-  clusterName: ""
-  environmentGitOwner: ""
-  project: ""
-  provider: gke
-  zone: ""
-gitops: true
+  clusterName: production-jenkinsx
+  environmentGitOwner: group1001
+  gitKind: github
+  gitName: github
+  gitServer: https://github.com
+  namespace: jx
+  provider: eks
+  region: us-east-2
+  zone: us-east-2
 environments:
-- key: dev
-- key: staging
-- key: production
+  - ingress:
+      domain: development.pipelines.group1001.cloud
+      externalDNS: true
+      namespaceSubDomain: -jx.
+      tls:
+        email: ddt-sre@group1001.com
+        enabled: true
+        production: false
+    key: development
+  - ingress:
+      domain: staging.pipelines.group1001.cloud
+      externalDNS: true
+      namespaceSubDomain: -jx.
+      tls:
+        email: ddt-sre@group1001.com
+        enabled: true
+        production: false
+    key: staging
+  - ingress:
+      domain: qa.pipelines.group1001.cloud
+      externalDNS: true
+      namespaceSubDomain: -jx.
+      tls:
+        email: ddt-sre@group1001.com
+        enabled: true
+        production: false
+    key: qa
+  - ingress:
+      domain: uat.pipelines.group1001.cloud
+      externalDNS: true
+      namespaceSubDomain: -jx.
+      tls:
+        email: ddt-sre@group1001.com
+        enabled: true
+        production: false
+    key: uat
+  - ingress:
+      domain: pipelines.group1001.cloud
+      externalDNS: true
+      namespaceSubDomain: -jx.
+      tls:
+        email: ddt-sre@group1001.com
+        enabled: true
+        production: false
+    key: production
+gitops: true
 ingress:
   domain: ""
   externalDNS: false
+  namespaceSubDomain: -jx.
   tls:
     email: ""
     enabled: false
     production: false
 kaniko: true
-secretStorage: local
+repository: nexus
+secretStorage: vault
 storage:
+  backup:
+    enabled: false
+    url: ""
   logs:
-    enabled: false
-    url: ""
+    enabled: true
+    url: s3://audit.group1001.com/551655731325/jenkinsx/main.log
   reports:
-    enabled: false
-    url: ""
+    enabled: true
+    url: s3://audit.group1001.com/551655731325/jenkinsx/reports.log
   repository:
-    enabled: false
-    url: ""
+    enabled: true
+    url: s3://build.group1001.com
+vault:
+  aws:
+    autoCreate: true
+    iamUserName: jenkinsx
+  disableURLDiscovery: true
+velero: {}
 versionStream:
-  ref: "master"
+  ref: v1.0.245
   url: https://github.com/jenkins-x/jenkins-x-versions.git
 webhook: prow

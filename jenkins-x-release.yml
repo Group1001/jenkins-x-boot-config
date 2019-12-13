@@ -1,3 +1,4 @@
+---
 buildPack: none
 pipelineConfig:
   pipelines:
@@ -10,11 +11,11 @@ pipelineConfig:
             steps:
               - name: changelog
                 command: jx
-                args: 
-                - step
-                - changelog
-                - --verbose
-                - --version
-                - ${VERSION}
-                - --rev
-                - ${PULL_BASE_SHA}
+                args:
+                  - step
+                  - changelog
+                  - --verbose
+                  - --version
+                  - ${VERSION}
+                  - --rev
+                  - ${PULL_BASE_SHA}
